@@ -4,6 +4,8 @@
 #define IMAGE_SIZEOF_SHORT_NAME 8
 #include <stdio.h>
 
+//#pragma pack(push, 1)
+
 typedef struct _DOS_Header 
  {
 // short is 2 bytes, long is 4 bytes
@@ -13,7 +15,7 @@ typedef struct _DOS_Header
      short nreloc;
      short hdrsize;
      short minalloc;
-     short maxalloc;
+     unsigned short maxalloc;
      short ss; // 2 byte value
      short sp; // 2 byte value
      short checksum;
@@ -27,6 +29,12 @@ typedef struct _DOS_Header
      short reserved2[10];
      long  e_lfanew; // Offset to the 'PE\0\0' signature relative to the beginning of the file
  }DOS_Header;
+
+typedef struct _Print_DOS_HEADER
+{
+	unsigned short imformation[30]; 
+	long e_lfanew; 
+}Print_DOS_Header; 
 
 typedef struct _COFF_Header
  {
@@ -92,7 +100,7 @@ typedef struct _IMAGE_SECTION_HEADER
  {
 // short is 2 bytes
 // long is 4 bytes
-  char  Name[IMAGE_SIZEOF_SHORT_NAME]; // IMAGE_SIZEOF_SHORT_NAME is 8 bytes
+  char Name[IMAGE_SIZEOF_SHORT_NAME]; // IMAGE_SIZEOF_SHORT_NAME is 8 bytes
   union {
     long PhysicalAddress;
     long VirtualSize;
@@ -107,6 +115,8 @@ typedef struct _IMAGE_SECTION_HEADER
   long  Characteristics;
  }IMAGE_SECTION_HEADER;
 
+//#pragma pack(pop)
+
 #endif
 
 
@@ -115,5 +125,5 @@ void error_msg_print(const char* msg, int error_code);
 int control_function(const char* file_name); 
 //int check_pe(FILE* file_pointer);
 void pe_header_parser(FILE* , DOS_Header*, COFF_Header*, PE_OptHeader*);
-void print_pe_format_imformation(DOS_Header*, COFF_Header*, PE_OptHeader* );
+void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, IMAGE_SECTION_HEADER*, int);
 void pe_section_parser(FILE* , IMAGE_SECTION_HEADER* , int );

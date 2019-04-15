@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 }
 
 
-/*i
+/*
  this function is controll function like little main!
 */
 int control_function(const char* file_name)
@@ -44,6 +44,10 @@ int control_function(const char* file_name)
 	IMAGE_SECTION_HEADER image_section_header[coff_header.NumberOfSections]; //section table 
 
 	pe_section_parser(file_pointer, image_section_header, coff_header.NumberOfSections);
+	
+	print_pe_format_imformation(file_pointer, &dos_header, &coff_header, &pe_option_header, image_section_header, coff_header.NumberOfSections);
+	
+	free(pe_option_header.DataDirectory); //memory free
 	return 0;
 }
 
@@ -71,7 +75,6 @@ void pe_header_parser(FILE* file_pointer, DOS_Header* dos_header, COFF_Header* c
 	//read optional header 
 	//why sub size struct _data_directory* => 이는 numberofrvaandsize 멤버를 통해 결정되는 사이즈이기 때문에 이것만 빼고 미리 읽어야함. 
 	pe_option_header->DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * pe_option_header->NumberOfRvaAndSizes); 
-	printf("test : %x\n", pe_option_header->NumberOfRvaAndSizes);
 	
 	//read DataDirectory until NumberOfRvaAndSizes!
 	for(int i=0;i<pe_option_header->NumberOfRvaAndSizes;i++)
