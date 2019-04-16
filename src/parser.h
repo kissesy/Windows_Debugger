@@ -54,6 +54,50 @@ typedef struct _data_directory
 	long Size; 
 }date_directory;
 
+
+
+//////////////////////////////////////64bit////////////////////////////////////////////
+typedef struct _64PE_OptHeader
+ {
+/* 64 bit version of the PE Optional Header also known as IMAGE_OPTIONAL_HEADER64
+char is 1 byte
+short is 2 bytes
+long is 4 bytes
+long long is 8 bytes
+*/
+    short signature; //decimal number 267 for 32 bit, 523 for 64 bit, and 263 for a ROM image. 
+    char MajorLinkerVersion; 
+    char MinorLinkerVersion;
+    long SizeOfCode;
+    long SizeOfInitializedData;
+    long SizeOfUninitializedData;
+    long AddressOfEntryPoint;  //The RVA of the code entry point
+    long BaseOfCode;
+    /*The next 21 fields are an extension to the COFF optional header format*/
+    long long ImageBase;
+    long SectionAlignment;
+    long FileAlignment;
+    short MajorOSVersion;
+    short MinorOSVersion;
+    short MajorImageVersion;
+    short MinorImageVersion;
+    short MajorSubsystemVersion;
+    short MinorSubsystemVersion;
+    long Win32VersionValue;
+    long SizeOfImage;
+    long SizeOfHeaders;
+    long Checksum;
+    short Subsystem;
+    short DLLCharacteristics;
+    long long SizeOfStackReserve;
+    long long SizeOfStackCommit;
+    long long SizeOfHeapReserve;
+    long long SizeOfHeapCommit;
+    long LoaderFlags;
+    long NumberOfRvaAndSizes;
+    struct data_directory* DataDirectory;     //Can have any number of elements, matching the number in NumberOfRvaAndSizes.
+ }PE_OpHeader64;                                        //However, it is always 16 in PE files.
+///////////////////////////////32bit/////////////////////////////////////////////
 typedef struct _PE_OptHeader
  {
 /* 32 bit version of the PE Optional Header also known as IMAGE_OPTIONAL_HEADER
