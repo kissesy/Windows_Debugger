@@ -169,6 +169,20 @@ void print_pe_format_imformation(FILE* file_pointer, DOS_Header* dos_header, COF
 	printf("%08X \t %08X\t%s\n", file_offset, pe_option_header->NumberOfRvaAndSizes, description_pe_optional_header[29]);
 	file_offset+=sizeof(pe_option_header->NumberOfRvaAndSizes); 
 
+	//int offset[32] = {0, 4, 6, 8, 12, 16, 20, 22};
+	/*
+	int offset[10]= {0,1,2,3,4,5,6,7,8};
+
+	printf("==============================================\n");
+	printf("%p\n", &coff_header->signature);
+	printf("%p\n", &coff_header->Machine);
+	printf("%p\n", &coff_header->NumberOfSections);
+	printf("=============================================\n");
+	for(int i=0;i<8;i++)
+	{
+		printf("%p \t %08X\t%s\n", (&(coff_header->signature)+offset[i]), *(&(coff_header->signature)+offset[i]), description_coff_header[i]);
+	}
+	*/
 }
 
 
