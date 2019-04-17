@@ -95,8 +95,8 @@ long long is 8 bytes
     long long SizeOfHeapCommit;
     long LoaderFlags;
     long NumberOfRvaAndSizes;
-    struct data_directory* DataDirectory;     //Can have any number of elements, matching the number in NumberOfRvaAndSizes.
- }PE_OpHeader64;                                        //However, it is always 16 in PE files.
+    struct _data_directory* DataDirectory;     //Can have any number of elements, matching the number in NumberOfRvaAndSizes.
+ }PE_OptHeader64;                                        //However, it is always 16 in PE files.
 ///////////////////////////////32bit/////////////////////////////////////////////
 typedef struct _PE_OptHeader
  {
@@ -168,6 +168,6 @@ unsigned char* file_to_heap(const char* name, int* file_vol);
 void error_msg_print(const char* msg, int error_code); 
 int control_function(const char* file_name); 
 //int check_pe(FILE* file_pointer);
-void pe_header_parser(FILE* , DOS_Header*, COFF_Header*, PE_OptHeader*);
-void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, IMAGE_SECTION_HEADER*, int);
+void pe_header_parser(FILE* , DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, int* );
+void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, IMAGE_SECTION_HEADER*, int);
 void pe_section_parser(FILE* , IMAGE_SECTION_HEADER* , int );

@@ -19,7 +19,7 @@ return : void
 description: print pe imformation
 */
 
-void print_pe_format_imformation(FILE* file_pointer, DOS_Header* dos_header, COFF_Header* coff_header, PE_OptHeader* pe_option_header, IMAGE_SECTION_HEADER* image_section_header, int section_number)
+void print_pe_format_imformation(FILE* file_pointer, DOS_Header* dos_header, COFF_Header* coff_header, PE_OptHeader* pe_option_header, PE_OptHeader64* pe_option_header64, IMAGE_SECTION_HEADER* image_section_header, int section_number)
 {
 	char* description_dos_header[31] = {"Signature", "Bytes on Last Page of File", "Pages in File", "Relocations", "Size of Header in Paragraphs", "Minimum Extra Paragraphs", "Maximum Extra Paragraphs", "Initial SS", "Initial SP", "Checksum", "Initial IP", "Initial CS", "Offset to Relocation Table", "Overlay Number", "Rserved", "Reserved", "Reserved", "Reserved", "OEM Identifier", "OEM Information", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Reserved", "Offset to New EXE Header"};
 
