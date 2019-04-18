@@ -3,35 +3,14 @@
    read to file, mapping Heap!
    */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-   //#include <windows.h>
-   //#include <winnt.h>
-
 #include "parser.h"
 
 
-/*
-int main(int argc, char** argv)
-{
-	if(argc !=2)
-	{
-		error_msg_print("Please use argv[1]", 0);
-	}
-	control_function(argv[1]);
-	return 0;
-}
-*/
-
-/*
-   this function is controll function like little main!
-   */
 
    //winproc함수에서 인자로 넘길 예정
    //구조체도 인자로 넘겨야 할듯 
    //DOS_Header* dos_header, COFF_Header* coff_header, PE_OptHeader64* pe_option_header, PE_OptHeader pe_option_header; 
+/*
 int control_function(const char* file_name)
 {
 	int binary_bit_number = 0; // 32bit is 32, 64bit is 64
@@ -58,7 +37,7 @@ int control_function(const char* file_name)
 	free(pe_option_header.DataDirectory); //memory free
 	return 0;
 }
-
+*/
 /*
    argu1(file_pointer) : file_pointer to analysis file
    argu2(*dos_header) : input dos_header contents
@@ -69,6 +48,62 @@ return : void
 description : parsing pe format for DOS_Header and COFF_Header and PE_OptHeader
 */
 
+int PE_Header_Parser()
+{
+	short bit_signature = 0;
+	int backup_filepointer_position = 0;
+	fseek(collect_struct.file_pointer, 0, SEEK_SET);
+	fread(&(collect_struct.dos_header), sizeof(DOS_Header), 1, collect_struct.file_pointer);
+
+	fseek(collect_struct.file_pointer, collect_struct.dos_header.e_lfanew, SEEK_SET);
+	fread(&(collect_struct.coff_header), sizeof(COFF_Header), 1, collect_struct.file_pointer);
+
+	backup_filepointer_position = ftell(collect_struct.file_pointer);
+	fread(&bit_signature, sizeof(bit_signature), 1, collect_struct.file_pointer);
+
+	if (bit_signature = 267) {
+		collect_struct.binary_bit = 32;
+	}
+	else if (bit_signature == 523) {
+		collect_struct.binary_bit = 64;
+	}
+	else {
+		return -1;
+	}
+	fseek(collect_struct.file_pointer, backup_filepointer_position, SEEK_SET); 
+	if (collect_struct.binary_bit == 32)
+	{
+		fread(&(collect_struct.pe_option_header), sizeof(PE_OptHeader) - sizeof(struct _data_directory*), 1, collect_struct.file_pointer);
+		//read optional header 
+		//why sub size struct _data_directory* => 이는 numberofrvaandsize 멤버를 통해 결정되는 사이즈이기 때문에 이것만 빼고 미리 읽어야함. 
+		collect_struct.pe_option_header.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct.pe_option_header.NumberOfRvaAndSizes);
+
+		//read DataDirectory until NumberOfRvaAndSizes!
+		for (int i = 0; i < collect_struct.pe_option_header.NumberOfRvaAndSizes; i++)
+		{
+			fread(&(collect_struct.pe_option_header.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct.file_pointer);
+		}
+	}
+	else if (collect_struct.binary_bit == 64)
+	{
+		fread(&(collect_struct.pe_option_header64), sizeof(PE_OptHeader64) - sizeof(struct _data_directory*), 1, collect_struct.file_pointer);
+		collect_struct.pe_option_header64.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct.pe_option_header64.NumberOfRvaAndSizes);
+
+		for (int i = 0; i < collect_struct.pe_option_header64.NumberOfRvaAndSizes; i++)
+		{
+			fread(&(collect_struct.pe_option_header64.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct.file_pointer);
+		}
+	}
+}
+
+int PE_Section_Parser()
+{
+	for (int i = 0; i < collect_struct.coff_header.NumberOfSections; i++)
+	{
+		fread(&(collect_struct.image_section_header[i]), sizeof(IMAGE_Section_Header), 1, collect_struct.file_pointer);
+	}
+}
+/*
 void pe_header_parser(FILE* file_pointer, DOS_Header* dos_header, COFF_Header* coff_header, PE_OptHeader* pe_option_header, PE_OptHeader64* pe_option_header64, int* binary_bit_number)
 {
 	short bit_signature = 0; //check bit number 
@@ -119,7 +154,7 @@ void pe_header_parser(FILE* file_pointer, DOS_Header* dos_header, COFF_Header* c
 		}
 	}
 }
-
+*/
 /*
    argu1(file_pointer) : file pointer
    argu2(image_section_header) : struct section table

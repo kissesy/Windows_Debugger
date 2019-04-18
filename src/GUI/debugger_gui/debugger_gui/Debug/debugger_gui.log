@@ -1,14 +1,4 @@
-﻿  gui_pe_parser.c
-C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(323): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
-C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(325): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
-C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(327): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
-C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(329): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
-  pe_parser.c
-C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(44): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' 선언을 참조하십시오.
-  코드를 생성하고 있습니다...
-  debugger_gui.vcxproj -> C:\Users\tuuna\debugger\src\GUI\debugger_gui\Debug\debugger_gui.exe
+﻿  pe_parser.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(105): warning C4716: 'PE_Section_Parser': 값을 반환해야 합니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(97): warning C4715: 'PE_Header_Parser': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  debugger_gui.vcxproj -> C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\Debug\debugger_gui.exe

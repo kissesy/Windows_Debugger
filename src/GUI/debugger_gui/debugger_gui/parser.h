@@ -4,8 +4,25 @@
 
 #define IMAGE_SIZEOF_SHORT_NAME 8
 #include <stdio.h>
+//#include <windows.h>
+#include "parser.h"
+#include <winsock2.h>
+#include <windows.h>
+#include <iphlpapi.h>
+#include "resource.h"
+#include <commctrl.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ws2tcpip.h>
+#include <errno.h>
+//#include <errno.h>
 
+#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "iphlpapi.lib")
 //#pragma pack(push, 1)
+
+#define ID_COMBOBOX 100
 
 typedef struct _DOS_Header
 {
@@ -160,6 +177,22 @@ typedef struct __IMAGE_SECTION_HEADER
 	long  Characteristics;
 }IMAGE_Section_Header;
 
+typedef struct _Collect_Struct
+{
+	DOS_Header dos_header; 
+	COFF_Header coff_header;
+	PE_OptHeader pe_option_header;
+	PE_OptHeader64 pe_option_header64;			//DdataDirectory = NULL 
+	IMAGE_Section_Header* image_section_header; //NULL
+	int file_offset;
+	int binary_bit;
+	FILE* file_pointer;
+	char file_name[300];
+	int what_paint;
+}Collect_Struct;
+
+extern Collect_Struct collect_struct; 
+
 //#pragma pack(pop)
 
 #endif
@@ -172,3 +205,15 @@ int control_function(const char* file_name);
 void pe_header_parser(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, int*);
 void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, IMAGE_Section_Header*, int);
 void pe_section_parser(FILE*, IMAGE_Section_Header*, int);
+
+void open_file(HWND hWnd, int max_len);
+void make_ComBoBox(HWND hWnd);
+BOOL print_ipaddress(int* byte1, int* byte2, int* byte3, int* byte4);
+void print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua, char* ip_address);
+void print_adapter(PIP_ADAPTER_ADDRESSES aa, char* check_adapter);
+void text_print(HWND hdc);
+
+int setting_parser(HWND hWnd); 
+int PE_Header_Parser();
+int PE_Section_Parser();
+void change_char();
