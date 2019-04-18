@@ -21,14 +21,16 @@ HINSTANCE g_hInst;
 LPSTR lpszClass = "Window Debugger Project";
 #define ID_COMBOBOX 100
 
+
 HWND hCombo;
+int what_paint = -1; 
 
 void open_file(HWND hWnd, char* file_name, int max_len);
 void make_ComBoBox(HWND hWnd);
 BOOL print_ipaddress(int* byte1, int* byte2, int* byte3, int* byte4);
 void print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua, char* ip_address);
 void print_adapter(PIP_ADAPTER_ADDRESSES aa, char* check_adapter);
-
+void text_print(HWND hdc);
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
 	HWND hWnd;
@@ -108,20 +110,22 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPara
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	//=====================================
-	char str[300];
+	//char str[300];
 	//LPARAM lpAdr = MAKEIPADDRESS(212, 56, 198, 92);
 	//HWND hWndIPAddress;
-	int i = 0;
+	//int i = 0;
+	RECT rc = {101, -2000, 1000, 2000};
+	int index_combobox = 0;
 	char lpstrFile[MAX_PATH]="";
 	int max_len = 256;
 	char file_name[300] = "";
 	HDC hdc;
 	PAINTSTRUCT ps;
-	HWND hCombo;
-	OPENFILENAME OFN;
+	char text[300] = {0, }; 
 	//=====================================
 	switch (iMessage) {
 	case WM_CREATE:
+		//hdc = GetDC(hWnd);
 		make_ComBoBox(hWnd); //selchange하면 띄우기!
 		//hWndIPAddress = CreateWindow(WC_IPADDRESS, NULL, WS_CHILD | WS_VISIBLE | WS_TABSTOP, 300, 300, 120, 20, hWnd, NULL, g_hInst, NULL);
 		//SendMessage(hWndIPAddress, IPM_SETADDRESS, 0, lpAdr);
@@ -129,14 +133,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);
 		SetMapMode(hdc, MM_ANISOTROPIC);
 		SetViewportOrgEx(hdc, 200, 150, NULL);
-		MoveToEx(hdc, 70, -2000, NULL);
-		LineTo(hdc, 70, 2000);
+		MoveToEx(hdc, 100, -2000, NULL);
+		LineTo(hdc, 100, 2000); //rect = 101, -2000, 1000, 2000
+		if (what_paint == 0)
+		{
+			TextOut(hdc, 200, -130, "Great World", strlen("Great World"));
+			//text_print(hdc);
+			what_paint = -1;
+		}
+		else if (what_paint == 1)
+		{
+			TextOut(hdc, 200, -120, "Hello World", strlen("Hello World")); 
+			//text_print(hdc);
+			what_paint = -1;
+		}
+		else if (what_paint == 2)
+		{
+			TextOut(hdc, 200, -100, "Good World", strlen("Good World"));
+			what_paint = -1;
+		}
+		//InvalidateRect(hdc, rc, TRUE); 
+		//무효화 영역은 어떤것을 호출하면 하게하자. 
 		EndPaint(hWnd, &ps);
 		return 0;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-
 		case ID_FILE_OPEN:
 			open_file(hWnd, file_name, 256);;
 			return 0;
@@ -158,6 +180,29 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			switch (HIWORD(wParam))
 			{
 			case CBN_SELCHANGE:
+				index_combobox = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
+				
+				if (index_combobox == 0)
+				{
+					InvalidateRect(hWnd, &rc, TRUE);
+					what_paint = 0; 
+				}
+
+				else if (index_combobox == 1)
+				{
+					InvalidateRect(hWnd, &rc, TRUE);
+					what_paint = 1;
+				}
+				else if (index_combobox == 2)
+				{
+					InvalidateRect(hWnd, &rc, TRUE);
+					what_paint = 2;
+				}
+				//SendMessage(hCombo, CB_GETLBTEXT, index_combobox, (LPARAM)text);
+				//SetWindowText(hWnd, text); 
+				//명령 실행 여기서 하면 될듯 
+				//InvalidateReat해서 부분영역만 무효화 한다음 PAINT해야하는뎀...
+				//값 하나 넘겨서 뭘 paint할건지도 해야되네 
 				break;
 			}
 		}
@@ -169,10 +214,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	return(DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
 
+void text_print(HWND hdc)
+{
+	
+	what_paint = 0;
+}
+
 void make_ComBoBox(HWND hWnd)
 {
-	int i = 0;
 	char* items[] = { "IMAGE_DOS_HEADER","MS-DOS Stub Program", "IMAGE_FILE_HEADER", "IMAGE_OPTIONAL_HEADER" };
+	int i = 0;
 	hCombo = CreateWindow("combobox", NULL, WS_CHILD | WS_VISIBLE | CBS_DROPDOWN,10, 10, 250, 200, hWnd, (HMENU)ID_COMBOBOX, g_hInst, NULL);
 	for (i = 0; i < 5; i++)
 		SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)items[i]);
