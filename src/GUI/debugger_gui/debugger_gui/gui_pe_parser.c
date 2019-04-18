@@ -3,6 +3,7 @@
 #endif
 
 //#include <windows.h>
+#include "parser.h"
 #include <winsock2.h>
 #include <windows.h>
 #include <iphlpapi.h>
@@ -15,6 +16,8 @@
 
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "iphlpapi.lib")
+
+
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
@@ -137,19 +140,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		LineTo(hdc, 100, 2000); //rect = 101, -2000, 1000, 2000
 		if (what_paint == 0)
 		{
-			TextOut(hdc, 200, -130, "Great World", strlen("Great World"));
+			TextOut(hdc, 200, -130, "Great World", strlen("Great World"));	//±‚¡ÿ ¡¬«• dos_header
 			//text_print(hdc);
 			what_paint = -1;
 		}
-		else if (what_paint == 1)
+		else if (what_paint == 1) //coff header 
 		{
 			TextOut(hdc, 200, -120, "Hello World", strlen("Hello World")); 
 			//text_print(hdc);
 			what_paint = -1;
 		}
-		else if (what_paint == 2)
+		else if (what_paint == 2) //optional header 
 		{
 			TextOut(hdc, 200, -100, "Good World", strlen("Good World"));
+			what_paint = -1;
+		}
+		else if (what_paint == 3) //section header 1 ~ n 
+		{
+			TextOut(hdc, 200, -80, "Nice World", strlen("Nice World"));
 			what_paint = -1;
 		}
 		//InvalidateRect(hdc, rc, TRUE); 
@@ -197,6 +205,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				{
 					InvalidateRect(hWnd, &rc, TRUE);
 					what_paint = 2;
+				}
+				else if (index_combobox == 3)
+				{
+					InvalidateRect(hWnd, &rc, TRUE);
+					what_paint = 3;
 				}
 				//SendMessage(hCombo, CB_GETLBTEXT, index_combobox, (LPARAM)text);
 				//SetWindowText(hWnd, text); 

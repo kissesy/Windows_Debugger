@@ -144,9 +144,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="error_code.c" />
     <ClCompile Include="gui_pe_parser.c" />
+    <ClCompile Include="pe_parser.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dumpcode.h" />
+    <ClInclude Include="parser.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

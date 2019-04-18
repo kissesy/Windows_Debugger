@@ -48,7 +48,7 @@ int control_function(const char* file_name)
 	}
 	pe_header_parser(file_pointer, &dos_header, &coff_header, &pe_option_header, &pe_option_header64, &binary_bit_number); 
 
-	IMAGE_SECTION_HEADER image_section_header[coff_header.NumberOfSections]; //section table 
+	IMAGE_Section_Header image_section_header[coff_header.NumberOfSections]; //section table 
 
 	pe_section_parser(file_pointer, image_section_header, coff_header.NumberOfSections);
 
@@ -128,11 +128,11 @@ description : fill the image_section_header struct each section
 
 return : void
 */
-void pe_section_parser(FILE* file_pointer, IMAGE_SECTION_HEADER* image_section_header, int section_number)
+void pe_section_parser(FILE* file_pointer, IMAGE_Section_Header* image_section_header, int section_number)
 {
 	for(int i=0;i<section_number;i++)
 	{
-		fread(&image_section_header[i],sizeof(IMAGE_SECTION_HEADER), 1,file_pointer); 
+		fread(&image_section_header[i],sizeof(IMAGE_Section_Header), 1,file_pointer); 
 	}	
 }
 

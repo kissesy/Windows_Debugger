@@ -18,9 +18,21 @@
     <ClCompile Include="gui_pe_parser.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="error_code.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pe_parser.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="parser.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="dumpcode.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
