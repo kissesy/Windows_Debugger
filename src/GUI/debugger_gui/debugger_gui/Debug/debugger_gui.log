@@ -1,0 +1,13 @@
+﻿  gui_pe_parser.c
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(121): warning C4101: 'OFN' :참조되지 않은 지역 변수입니다.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(120): warning C4101: 'hCombo' :참조되지 않은 지역 변수입니다.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(111): warning C4101: 'str' :참조되지 않은 지역 변수입니다.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(259): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(261): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(263): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(265): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+  debugger_gui.vcxproj -> C:\Users\tuuna\debugger\src\GUI\debugger_gui\Debug\debugger_gui.exe

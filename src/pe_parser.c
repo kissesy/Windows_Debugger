@@ -13,6 +13,7 @@
 #include "parser.h"
 
 
+/*
 int main(int argc, char** argv)
 {
 	if(argc !=2)
@@ -22,11 +23,15 @@ int main(int argc, char** argv)
 	control_function(argv[1]); 
 	return 0;
 }
-
+*/
 
 /*
    this function is controll function like little main!
    */
+
+//winproc함수에서 인자로 넘길 예정 
+//구조체도 인자로 넘겨야 할듯 
+//DOS_Header* dos_header, COFF_Header* coff_header, PE_OptHeader64* pe_option_header, PE_OptHeader pe_option_header; 
 int control_function(const char* file_name)
 {
 	int binary_bit_number = 0; // 32bit is 32, 64bit is 64
@@ -47,7 +52,7 @@ int control_function(const char* file_name)
 
 	pe_section_parser(file_pointer, image_section_header, coff_header.NumberOfSections);
 
-	print_pe_format_imformation(file_pointer, &dos_header, &coff_header, &pe_option_header, &pe_option_header64, image_section_header, coff_header.NumberOfSections);
+	//print_pe_format_imformation(file_pointer, &dos_header, &coff_header, &pe_option_header, &pe_option_header64, image_section_header, coff_header.NumberOfSections);
 
 	free(pe_option_header.DataDirectory); //memory free
 	return 0;
