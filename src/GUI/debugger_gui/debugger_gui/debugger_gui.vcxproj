@@ -147,6 +147,7 @@
     <ClCompile Include="error_code.c" />
     <ClCompile Include="gui_pe_parser.c" />
     <ClCompile Include="ip_check.c" />
+    <ClCompile Include="parser_to_string.c" />
     <ClCompile Include="pe_parser.c" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="debugger_gui.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

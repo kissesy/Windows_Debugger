@@ -16,6 +16,9 @@
 #include <stdlib.h>
 #include <ws2tcpip.h>
 #include <errno.h>
+
+#include <wchar.h>
+#include <strsafe.h>
 //#include <errno.h>
 
 #pragma comment(lib, "ws2_32.lib")
@@ -189,6 +192,7 @@ typedef struct _Collect_Struct
 	FILE* file_pointer;
 	char file_name[300];
 	int what_paint;
+	int fin_parsing;
 }Collect_Struct;
 
 //extern Collect_Struct collect_struct; 
@@ -204,7 +208,7 @@ void error_msg_print(const char* msg, int error_code);
 //int check_pe(FILE* file_pointer);
 //void pe_header_parser(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, int*);
 //void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, IMAGE_Section_Header*, int);
-void pe_section_parser(FILE*, IMAGE_Section_Header*, int);
+//void pe_section_parser(FILE*, IMAGE_Section_Header*, int);
 
 int open_file(HWND hWnd, Collect_Struct* collect_struct, int max_len);
 void make_ComBoBox(HWND hWnd);
@@ -217,3 +221,9 @@ int setting_parser(HWND hWnd, Collect_Struct* collect_struct);
 int PE_Header_Parser(Collect_Struct* collect_struct);
 int PE_Section_Parser(Collect_Struct* collect_struct);
 void change_char(Collect_Struct* collect_struct);
+
+void parser_to_string_dos_header(char (*print_string)[100], Collect_Struct* collect_struct, HWND hWnd);
+
+void GetSelectedDate(HWND hMonthCal, HWND hStat, HWND hDlg);
+
+int dos_header_getval(Collect_Struct* collect_struct, int n, int* offset);

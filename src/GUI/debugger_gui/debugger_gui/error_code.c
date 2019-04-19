@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+
 /*
 argu1(msg) : print msg error_msg
 argu2(error_code) : save erorro number, if error_code is 0, ignore!
