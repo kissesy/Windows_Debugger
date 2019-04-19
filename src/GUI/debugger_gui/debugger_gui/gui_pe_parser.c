@@ -10,7 +10,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
 LPSTR lpszClass = "Window Debugger Project";
 
-Collect_Struct collect_struct; 
+//Collect_Struct collect_struct; 
 HWND hCombo;
 
 
@@ -21,10 +21,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	MSG Message;
 	WNDCLASS WndClass;
 	g_hInst = hInstance;
-
-	collect_struct.image_section_header = NULL; 
-	collect_struct.pe_option_header.DataDirectory = NULL;
-	collect_struct.pe_option_header64.DataDirectory = NULL;
 
 	WndClass.cbClsExtra = 0;
 	WndClass.cbWndExtra = 0;
@@ -88,17 +84,25 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPara
 LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	//=====================================
-	RECT rc = {101, -2000, 1000, 2000};
+	static Collect_Struct collect_struct;
+	int return_function_value = 0;
+
+	RECT rc = { 101, -2000, 1000, 2000 };
 	int index_combobox = 0;
-	char lpstrFile[MAX_PATH]="";
+	char lpstrFile[MAX_PATH] = "";
 	int max_len = 256;
 	HDC hdc;
 	PAINTSTRUCT ps;
+
+	char test[300] = { 0, };
 	//=====================================
-	memset(collect_struct.file_name, 0, 300);
+	//memset(collect_struct.file_name, 0, 300);
 	//=====================================
 	switch (iMessage) {
 	case WM_CREATE:
+		collect_struct.image_section_header = NULL;
+		collect_struct.pe_option_header.DataDirectory = NULL;
+		collect_struct.pe_option_header64.DataDirectory = NULL;
 		make_ComBoBox(hWnd); //selchange하면 띄우기!
 
 	case WM_PAINT:
@@ -110,6 +114,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		if (collect_struct.what_paint == 0)
 		{
 			TextOut(hdc, 200, -130, "Great World", strlen("Great World"));	//기준 좌표 dos_header
+			sprintf(test, "%x", collect_struct.dos_header.e_lfanew);
+			TextOut(hdc, 200, -120, test, strlen(test));
 			collect_struct.what_paint = -1;
 		}
 		else if (collect_struct.what_paint == 1) //coff header 
@@ -135,9 +141,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		switch (LOWORD(wParam))
 		{
 		case ID_FILE_OPEN:
-			open_file(hWnd, 256);
-			//MessageBox(hWnd, collect_struct.file_name, "hello", MB_OK);
-			setting_parser(hWnd);
+			return_function_value = open_file(hWnd, &collect_struct, 256);
+			if (return_function_value == -1)
+			{
+				MessageBox(hWnd, "Failed File Open!", "Error Message", MB_OK | MB_ICONWARNING);
+				return 0; 
+			}
+			else
+			{
+				return_function_value = setting_parser(hWnd, &collect_struct);
+				if (return_function_value == -1)
+				{
+					return 0; 
+				}
+			}
 			return 0;
 			//file_name에는 파일의 절대경로 나오니 이를 이제 pe_parser에 넣는다.
 		case ID_EXIT_EXIT40005:
@@ -196,68 +213,68 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	return(DefWindowProc(hWnd, iMessage, wParam, lParam));
 }
 
-void change_char()
+void change_char(Collect_Struct* collect_struct)
 {
 	int i = 0;
-	for (i = 0; collect_struct.file_name[i] != '\0'; i++)
+	for (i = 0; collect_struct->file_name[i] != '\0'; i++)
 	{
-		if (collect_struct.file_name[i] == 0x5c)
+		if (collect_struct->file_name[i] == 0x5c)
 		{
-			collect_struct.file_name[i] = '/'; 
+			collect_struct->file_name[i] = '/';
 		}
 	}
 }
 
 //초기화 작업 
-int setting_parser(HWND hWnd)
+int setting_parser(HWND hWnd, Collect_Struct* collect_struct)
 {
 	
-	if (collect_struct.image_section_header != NULL)
+	if (collect_struct->image_section_header != NULL)
 	{
-		free(collect_struct.image_section_header); 
-		collect_struct.image_section_header = NULL; 
+		free(collect_struct->image_section_header);
+		collect_struct->image_section_header = NULL;
 	}
-	if (collect_struct.pe_option_header.DataDirectory != NULL)
+	if (collect_struct->pe_option_header.DataDirectory != NULL)
 	{
-		free(collect_struct.pe_option_header.DataDirectory); 
-		collect_struct.pe_option_header.DataDirectory = NULL; 
+		free(collect_struct->pe_option_header.DataDirectory);
+		collect_struct->pe_option_header.DataDirectory = NULL;
 	}
-	else if (collect_struct.pe_option_header64.DataDirectory != NULL)
+	else if (collect_struct->pe_option_header64.DataDirectory != NULL)
 	{
-		free(collect_struct.pe_option_header64.DataDirectory); 
-		collect_struct.pe_option_header64.DataDirectory = NULL; 
+		free(collect_struct->pe_option_header64.DataDirectory);
+		collect_struct->pe_option_header64.DataDirectory = NULL;
 	}
 	//collect_struct.file_pointer = NULL;
-	collect_struct.what_paint = -1;
+	collect_struct->what_paint = -1;
 	//memcpy(collect_struct.file_name, 0, 300); 
-	collect_struct.file_offset = 0;
-	collect_struct.binary_bit = 0; 
-	memset(&collect_struct.dos_header, 0, sizeof(collect_struct.dos_header));
-	memset(&collect_struct.coff_header, 0, sizeof(collect_struct.coff_header));
-	memset(&collect_struct.pe_option_header, 0, sizeof(collect_struct.pe_option_header));
-	memset(&collect_struct.pe_option_header64, 0, sizeof(collect_struct.pe_option_header64));
+	collect_struct->file_offset = 0;
+	collect_struct->binary_bit = 0;
+	memset(&collect_struct->dos_header, 0, sizeof(collect_struct->dos_header));
+	memset(&collect_struct->coff_header, 0, sizeof(collect_struct->coff_header));
+	memset(&collect_struct->pe_option_header, 0, sizeof(collect_struct->pe_option_header));
+	memset(&collect_struct->pe_option_header64, 0, sizeof(collect_struct->pe_option_header64));
 	
-	change_char(); 
+	change_char(collect_struct); 
 
-	collect_struct.file_pointer = fopen(collect_struct.file_name, "rb");
-	if (collect_struct.file_pointer == NULL)
+	collect_struct->file_pointer = fopen(collect_struct->file_name, "rb");
+	if (collect_struct->file_pointer == NULL)
 	{
 		char test_file[300] = "";
-		sprintf(test_file, "%s", collect_struct.file_name);
+		sprintf(test_file, "%s", collect_struct->file_name);
 		MessageBox(hWnd, test_file, "Error Message", MB_OK); 
 		return -1;
 	}
 
 	//header를 파싱한 다음 section을 파싱한다. 
-	int check = PE_Header_Parser();
+	int check = PE_Header_Parser(collect_struct);
 	if (check == -1)
 	{
 		MessageBox(hWnd, "Parsing Error!", "Error Message", MB_OK);
 		return -1;
 	}
-	collect_struct.image_section_header = (IMAGE_Section_Header*)malloc(sizeof(IMAGE_Section_Header)* collect_struct.coff_header.NumberOfSections);
+	collect_struct->image_section_header = (IMAGE_Section_Header*)malloc(sizeof(IMAGE_Section_Header)* collect_struct->coff_header.NumberOfSections);
 
-	check = PE_Section_Parser(); 
+	check = PE_Section_Parser(collect_struct); 
 	if (check == -1)
 	{
 		MessageBox(hWnd, "Section Parsing Error!", "Error Message", MB_OK);
@@ -277,97 +294,27 @@ void make_ComBoBox(HWND hWnd)
 	return;
 }
 //open file 
-void open_file(HWND hWnd, int max_len)
+int open_file(HWND hWnd, Collect_Struct* collect_struct, int max_len)
 {
 	//memset(collect_struct.file_name, 0, 300);
-	strcpy(collect_struct.file_name,"");
+	strcpy(collect_struct->file_name,"");
 	OPENFILENAME OFN;
 	memset(&OFN, 0, sizeof(OPENFILENAME));
 	OFN.lStructSize = sizeof(OPENFILENAME);
 	OFN.hwndOwner = hWnd;
-	OFN.lpstrFile = collect_struct.file_name;
+	OFN.lpstrFile = collect_struct->file_name;
 	OFN.lpstrFilter = "Every File(*.*)\0*.*\0Text File\0*.txt;*.doc\0";
 	OFN.nMaxFile = max_len;
 	OFN.lpstrInitialDir = "c:\\";
 	if (GetOpenFileName(&OFN) != 0)
 	{
-		//MessageBox(hWnd, collect_struct.file_name, "dddddllo", MB_OK);
-		//MessageBox(hWnd, collect_struct.file_name, "open!", MB_OK);
+		MessageBox(hWnd, "Success File Open!", "System Message", MB_OK);
+	}
+	else
+	{
+		return -1; 
 	}
 	//MessageBox(hWnd, OFN.lpstrFile, "hello", MB_OK);
-	strcpy(collect_struct.file_name, OFN.lpstrFile);
-	return;
-}
-
-void print_adapter(PIP_ADAPTER_ADDRESSES aa, char* check_adapter)
-{
-	//char buf[BUFSIZ];
-	memset(check_adapter, 0, BUFSIZ);
-	WideCharToMultiByte(CP_ACP, 0, aa->FriendlyName, wcslen(aa->FriendlyName), check_adapter, BUFSIZ, NULL, NULL);
-}
-
-void print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua, char* ip_address)
-{
-	//char buf[BUFSIZ];
-	int family = ua->Address.lpSockaddr->sa_family;
-	//printf("\t%s ", family == AF_INET ? "IPv4" : "IPv6");
-	if (family == AF_INET) //only IPv4
-	{
-		memset(ip_address, 0, BUFSIZ);
-		getnameinfo(ua->Address.lpSockaddr, ua->Address.iSockaddrLength, ip_address, 200, NULL, 0, NI_NUMERICHOST);
-		//printf("%s\n", ip_address);
-	}
-}
-
-BOOL print_ipaddress(int* byte1, int* byte2, int* byte3, int* byte4)
-{
-	WSADATA d;
-	if (WSAStartup(MAKEWORD(2, 2), &d) != 0)
-	{
-		FALSE; 
-	}
-	char ip_address[BUFSIZ] = { 0, };
-	char check_adapter[BUFSIZ] = { 0, };
-	DWORD rv, size;
-	PIP_ADAPTER_ADDRESSES adapter_addresses, aa;
-	PIP_ADAPTER_UNICAST_ADDRESS ua;
-
-	rv = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, NULL, &size);
-	if (rv != ERROR_BUFFER_OVERFLOW) {
-		fprintf(stderr, "GetAdaptersAddresses() failed...");
-		return FALSE;
-	}
-	adapter_addresses = (PIP_ADAPTER_ADDRESSES)malloc(size);
-
-	rv = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_INCLUDE_PREFIX, NULL, adapter_addresses, &size);
-	if (rv != ERROR_SUCCESS) {
-		fprintf(stderr, "GetAdaptersAddresses() failed...");
-		free(adapter_addresses);
-		return FALSE;
-	}
-
-	for (aa = adapter_addresses; aa != NULL; aa = aa->Next) {
-		print_adapter(aa, check_adapter);
-		if (!strcmp(check_adapter, "Wi-Fi"))
-		{
-			for (ua = aa->FirstUnicastAddress; ua != NULL; ua = ua->Next) {
-				print_addr(ua, ip_address);
-			}
-		}
-		else
-			continue;
-	}
-	//token seperate 
-	char* token;
-	token = strtok(ip_address, ".");
-	*byte1 = atoi(token);
-	token = strtok(NULL, ".");
-	*byte2 = atoi(token);
-	token = strtok(NULL, ".");
-	*byte3 = atoi(token);
-	token = strtok(NULL, ".");
-	*byte4 = atoi(token);
-	free(adapter_addresses);
-	WSACleanup(); 
-	return TRUE;
+	strcpy(collect_struct->file_name, OFN.lpstrFile);
+	return 0;
 }

@@ -191,29 +191,29 @@ typedef struct _Collect_Struct
 	int what_paint;
 }Collect_Struct;
 
-extern Collect_Struct collect_struct; 
+//extern Collect_Struct collect_struct; 
 
 //#pragma pack(pop)
 
 #endif
 
 
-unsigned char* file_to_heap(const char* name, int* file_vol);
+//unsigned char* file_to_heap(const char* name, int* file_vol);
 void error_msg_print(const char* msg, int error_code);
-int control_function(const char* file_name);
+//int control_function(const char* file_name);
 //int check_pe(FILE* file_pointer);
-void pe_header_parser(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, int*);
-void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, IMAGE_Section_Header*, int);
+//void pe_header_parser(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, int*);
+//void print_pe_format_imformation(FILE*, DOS_Header*, COFF_Header*, PE_OptHeader*, PE_OptHeader64*, IMAGE_Section_Header*, int);
 void pe_section_parser(FILE*, IMAGE_Section_Header*, int);
 
-void open_file(HWND hWnd, int max_len);
+int open_file(HWND hWnd, Collect_Struct* collect_struct, int max_len);
 void make_ComBoBox(HWND hWnd);
 BOOL print_ipaddress(int* byte1, int* byte2, int* byte3, int* byte4);
 void print_addr(PIP_ADAPTER_UNICAST_ADDRESS ua, char* ip_address);
 void print_adapter(PIP_ADAPTER_ADDRESSES aa, char* check_adapter);
-void text_print(HWND hdc);
+//void text_print(HWND hdc);
 
-int setting_parser(HWND hWnd); 
-int PE_Header_Parser();
-int PE_Section_Parser();
-void change_char();
+int setting_parser(HWND hWnd, Collect_Struct* collect_struct);
+int PE_Header_Parser(Collect_Struct* collect_struct);
+int PE_Section_Parser(Collect_Struct* collect_struct);
+void change_char(Collect_Struct* collect_struct);

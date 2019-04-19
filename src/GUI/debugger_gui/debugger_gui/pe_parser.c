@@ -48,59 +48,59 @@ return : void
 description : parsing pe format for DOS_Header and COFF_Header and PE_OptHeader
 */
 
-int PE_Header_Parser()
+int PE_Header_Parser(Collect_Struct* collect_struct)
 {
 	short bit_signature = 0;
 	int backup_filepointer_position = 0;
-	fseek(collect_struct.file_pointer, 0, SEEK_SET);
-	fread(&(collect_struct.dos_header), sizeof(DOS_Header), 1, collect_struct.file_pointer);
+	fseek(collect_struct->file_pointer, 0, SEEK_SET);
+	fread(&(collect_struct->dos_header), sizeof(DOS_Header), 1, collect_struct->file_pointer);
 
-	fseek(collect_struct.file_pointer, collect_struct.dos_header.e_lfanew, SEEK_SET);
-	fread(&(collect_struct.coff_header), sizeof(COFF_Header), 1, collect_struct.file_pointer);
+	fseek(collect_struct->file_pointer, collect_struct->dos_header.e_lfanew, SEEK_SET);
+	fread(&(collect_struct->coff_header), sizeof(COFF_Header), 1, collect_struct->file_pointer);
 
-	backup_filepointer_position = ftell(collect_struct.file_pointer);
-	fread(&bit_signature, sizeof(bit_signature), 1, collect_struct.file_pointer);
+	backup_filepointer_position = ftell(collect_struct->file_pointer);
+	fread(&bit_signature, sizeof(bit_signature), 1, collect_struct->file_pointer);
 
 	if (bit_signature = 267) {
-		collect_struct.binary_bit = 32;
+		collect_struct->binary_bit = 32;
 	}
 	else if (bit_signature == 523) {
-		collect_struct.binary_bit = 64;
+		collect_struct->binary_bit = 64;
 	}
 	else {
 		return -1;
 	}
-	fseek(collect_struct.file_pointer, backup_filepointer_position, SEEK_SET); 
-	if (collect_struct.binary_bit == 32)
+	fseek(collect_struct->file_pointer, backup_filepointer_position, SEEK_SET);
+	if (collect_struct->binary_bit == 32)
 	{
-		fread(&(collect_struct.pe_option_header), sizeof(PE_OptHeader) - sizeof(struct _data_directory*), 1, collect_struct.file_pointer);
+		fread(&(collect_struct->pe_option_header), sizeof(PE_OptHeader) - sizeof(struct _data_directory*), 1, collect_struct->file_pointer);
 		//read optional header 
 		//why sub size struct _data_directory* => 이는 numberofrvaandsize 멤버를 통해 결정되는 사이즈이기 때문에 이것만 빼고 미리 읽어야함. 
-		collect_struct.pe_option_header.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct.pe_option_header.NumberOfRvaAndSizes);
+		collect_struct->pe_option_header.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct->pe_option_header.NumberOfRvaAndSizes);
 
 		//read DataDirectory until NumberOfRvaAndSizes!
-		for (int i = 0; i < collect_struct.pe_option_header.NumberOfRvaAndSizes; i++)
+		for (int i = 0; i < collect_struct->pe_option_header.NumberOfRvaAndSizes; i++)
 		{
-			fread(&(collect_struct.pe_option_header.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct.file_pointer);
+			fread(&(collect_struct->pe_option_header.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct->file_pointer);
 		}
 	}
-	else if (collect_struct.binary_bit == 64)
+	else if (collect_struct->binary_bit == 64)
 	{
-		fread(&(collect_struct.pe_option_header64), sizeof(PE_OptHeader64) - sizeof(struct _data_directory*), 1, collect_struct.file_pointer);
-		collect_struct.pe_option_header64.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct.pe_option_header64.NumberOfRvaAndSizes);
+		fread(&(collect_struct->pe_option_header64), sizeof(PE_OptHeader64) - sizeof(struct _data_directory*), 1, collect_struct->file_pointer);
+		collect_struct->pe_option_header64.DataDirectory = (struct _data_directory*)malloc(sizeof(struct _data_directory) * collect_struct->pe_option_header64.NumberOfRvaAndSizes);
 
-		for (int i = 0; i < collect_struct.pe_option_header64.NumberOfRvaAndSizes; i++)
+		for (int i = 0; i < collect_struct->pe_option_header64.NumberOfRvaAndSizes; i++)
 		{
-			fread(&(collect_struct.pe_option_header64.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct.file_pointer);
+			fread(&(collect_struct->pe_option_header64.DataDirectory[i]), sizeof(struct _data_directory), 1, collect_struct->file_pointer);
 		}
 	}
 }
 
-int PE_Section_Parser()
+int PE_Section_Parser(Collect_Struct* collect_struct)
 {
-	for (int i = 0; i < collect_struct.coff_header.NumberOfSections; i++)
+	for (int i = 0; i < collect_struct->coff_header.NumberOfSections; i++)
 	{
-		fread(&(collect_struct.image_section_header[i]), sizeof(IMAGE_Section_Header), 1, collect_struct.file_pointer);
+		fread(&(collect_struct->image_section_header[i]), sizeof(IMAGE_Section_Header), 1, collect_struct->file_pointer);
 	}
 }
 /*
@@ -164,6 +164,7 @@ description : fill the image_section_header struct each section
 
 return : void
 */
+/*
 void pe_section_parser(FILE* file_pointer, IMAGE_Section_Header* image_section_header, int section_number)
 {
 	for (int i = 0; i < section_number; i++)
@@ -171,3 +172,4 @@ void pe_section_parser(FILE* file_pointer, IMAGE_Section_Header* image_section_h
 		fread(&image_section_header[i], sizeof(IMAGE_Section_Header), 1, file_pointer);
 	}
 }
+*/
