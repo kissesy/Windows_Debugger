@@ -149,6 +149,8 @@
     <ClCompile Include="ip_check.c" />
     <ClCompile Include="parser_to_string.c" />
     <ClCompile Include="pe_parser.c" />
+    <ClCompile Include="print_data_directory.c" />
+    <ClCompile Include="scroll_print_content.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dumpcode.h" />

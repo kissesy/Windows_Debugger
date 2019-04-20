@@ -9,17 +9,19 @@ HINSTANCE g_hInst;
 LPSTR lpszClass = "Window Debugger Project";
 //Collect_Struct collect_struct; 
 HWND hCombo;
-//==================================================
+//=====================================================
 /*LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HINSTANCE g_hInst;
 LPSTR lpszClass = "Class";
 */
+
 TEXTMETRIC tm;
 SCROLLINFO si;
 
 HWND hStat;
 HWND hMonthCal;
 
+/*
 // These variables are required to display text. 
 static int xClient;     // width of client area 
 static int yClient;     // height of client area 
@@ -40,10 +42,12 @@ int LastLine;           // last line in the invalidated area
 HRESULT hr;
 int abcLength = 0;  // length of an abc[] item
 
-int lines = 40;
+//int lines = 40;
 
 // Create an array of lines to display. 
-static const int LINES = 200;
+static const int LINES = 90; //이는 나중에 값으로 바꾸자. (각 헤더마다 필요한 라인의 수)
+*/
+static const int LINES = 90;
 //=========================================================
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
@@ -101,7 +105,7 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPara
 	case WM_INITDIALOG:
 		SetWindowText(hDlg, "Help");
 		//SendMessage(hWndMonthCal, MCM_SETCOLOR, MCSC_TITLEBK, RGB(205, 50, 5));
-		MonthCal_SetColor(hWndMonthCal, MCSC_TITLEBK, RGB(205, 50, 5));
+		//MonthCal_SetColor(hWndMonthCal, MCSC_TITLEBK, RGB(205, 50, 5));
 		return TRUE;
 	case WM_COMMAND:
 		switch (wParam)
@@ -113,14 +117,16 @@ BOOL CALLBACK AboutDlgProc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lPara
 		case IDC_BUTTON1:
 			SendMessage(hWndIPAddress, IPM_SETADDRESS, 0, lpAdr);
 			MessageBox(hDlg, "IP Renewal Success!", "System Message", MB_OK);
+			return 0;
 		}
-	case WM_NOTIFY:
+	/*case WM_NOTIFY:
 		lpNmHdr = (LPNMHDR)lParam;
 		if (lpNmHdr->code == MCN_SELECT) //날짜가 선택될 때 
 		{
 			GetSelectedDate(hMonthCal, hStat, hDlg);
 		}
 		break;
+		*/
 	}
 	return FALSE;
 }
@@ -129,6 +135,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
 	//=====================================
 	static Collect_Struct collect_struct;
+	static Scroll_Bar scroll_bar;
 	int return_function_value = 0;
 
 	RECT rc = { 101, -2000, 1000, 2000 };
@@ -154,12 +161,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		make_ComBoBox(hWnd); //selchange하면 띄우기!
 		//MessageBox(hWnd, "asd", "asd", MB_OK);
 		hdc = GetDC(hWnd);
+		///////////////////////////scroll_bar.LINES = 90; 
 		//TextOut(hdc, 200, 100, "Good World", strlen("Good World"));
 		// Extract font dimensions from the text metrics. 
 		GetTextMetrics(hdc, &tm);
-		xChar = tm.tmAveCharWidth;
-		xUpper = (tm.tmPitchAndFamily & 1 ? 3 : 2) * xChar / 2;
-		yChar = tm.tmHeight + tm.tmExternalLeading;
+		scroll_bar.xChar = tm.tmAveCharWidth;
+		scroll_bar.xUpper = (tm.tmPitchAndFamily & 1 ? 3 : 2) * scroll_bar.xChar / 2;
+		scroll_bar.yChar = tm.tmHeight + tm.tmExternalLeading;
 
 		// Free the device context. 
 		ReleaseDC(hWnd, hdc);
@@ -167,7 +175,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		// Set an arbitrary maximum width for client area. 
 		// (xClientMax is the sum of the widths of 48 average 
 		// lowercase letters and 12 uppercase letters.) 
-		xClientMax = 48 * xChar + 12 * xUpper;
+		scroll_bar.xClientMax = 48 * scroll_bar.xChar + 12 * scroll_bar.xUpper;
 
 		return 0;
 	case WM_VSCROLL:
@@ -176,7 +184,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		si.fMask = SIF_ALL;
 		GetScrollInfo(hWnd, SB_VERT, &si);
 		// Save the position for comparison later on
-		yPos = si.nPos;
+		scroll_bar.yPos = si.nPos;
 		switch (LOWORD(wParam))
 		{
 			// user clicked the HOME keyboard key
@@ -229,32 +237,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
 		GetScrollInfo(hWnd, SB_VERT, &si);
 		// If the position has changed, scroll window and update it
-		if (si.nPos != yPos)
+		if (si.nPos != scroll_bar.yPos)
 		{
-			ScrollWindow(hWnd, 0, yChar * (yPos - si.nPos), NULL, NULL);
+			ScrollWindow(hWnd, 0, scroll_bar.yChar * (scroll_bar.yPos - si.nPos), NULL, NULL);
 			UpdateWindow(hWnd);
 		}
 		InvalidateRect(hWnd, &rc, TRUE);
 		break;
 	case WM_SIZE:
 		// Retrieve the dimensions of the client area. 
-		yClient = HIWORD(lParam);
-		xClient = LOWORD(lParam);
+		scroll_bar.yClient = HIWORD(lParam);
+		scroll_bar.xClient = LOWORD(lParam);
 
 		// Set the vertical scrolling range and page size
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_RANGE | SIF_PAGE;
 		si.nMin = 0;
 		si.nMax = LINES - 1;
-		si.nPage = yClient / yChar;
+		si.nPage = scroll_bar.yClient / scroll_bar.yChar;
 		SetScrollInfo(hWnd, SB_VERT, &si, TRUE);
 
 		// Set the horizontal scrolling range and page size. 
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_RANGE | SIF_PAGE;
 		si.nMin = 0;
-		si.nMax = 2 + xClientMax / xChar;
-		si.nPage = xClient / xChar;
+		si.nMax = 2 + scroll_bar.xClientMax / scroll_bar.xChar;
+		si.nPage = scroll_bar.xClient / scroll_bar.xChar;
 		SetScrollInfo(hWnd, SB_HORZ, &si, TRUE);
 		return 0;
 	case WM_PAINT:
@@ -264,52 +272,67 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_POS;
 		GetScrollInfo(hWnd, SB_VERT, &si);
-		yPos = si.nPos;
+		scroll_bar.yPos = si.nPos;
 		// Get horizontal scroll bar position
 		GetScrollInfo(hWnd, SB_HORZ, &si);
-		xPos = si.nPos;
+		scroll_bar.xPos = si.nPos;
 		// Find painting limits
-		FirstLine = max(0, yPos + ps.rcPaint.top / yChar);
-		LastLine = min(LINES - 1, yPos + ps.rcPaint.bottom / yChar);
+		scroll_bar.FirstLine = max(0, scroll_bar.yPos + ps.rcPaint.top / scroll_bar.yChar);
+		/*
+		switch (collect_struct.what_paint)
+		{
+			case 0:
+				//scroll_bar.LINES = collect_struct.lines; 
+				break; 
+			case 1:
+				break; 
+			case 2:
+				break; 
+			case 4:
+				break;
+		}
+		*/
+		scroll_bar.LastLine = min(LINES - 1, scroll_bar.yPos + ps.rcPaint.bottom / scroll_bar.yChar);////////////////////////////////////////////////////설정 필요 
 		SetMapMode(hdc, MM_ANISOTROPIC);
 		SetViewportOrgEx(hdc, 200, 150, NULL);
-		MoveToEx(hdc, 100, -2000, NULL);
-		LineTo(hdc, 100, 2000); //rect = 101, -2000, 1000, 2000
+		MoveToEx(hdc, 100, -500, NULL);
+		LineTo(hdc, 100, 500); //rect = 101, -2000, 1000, 2000
 		
 		//MessageBox(hWnd, "2", "1", MB_OK);
 		//계속 이 값이 유지 되어야 함. 
-		if (collect_struct.what_paint == 0)
+		if (collect_struct.what_paint == 0 && collect_struct.fin_parsing == 1)
 		{
-			//MessageBox(hWnd, "3", "1", MB_OK);
-			//미리 문자열을 만들어둬야될듯 그리고 갯수도 
-			if (collect_struct.fin_parsing == 1)
-			{
-				parser_to_string_dos_header(print_string, &collect_struct, hWnd);
-				TextOut(hdc, 200, -150, "pFile      RawData      Description", strlen("pFile      RawData      Description"));
-				for (i = FirstLine; i <= LastLine; i++)
-				{
-					x = xChar * (1 - xPos);
-					y = yChar * (i - yPos);
-
-					// Note that "55" in the following depends on the 
-					// maximum size of an abc[] item.
-					//
-					abcLength = strlen(print_string[i]);
-					hr = S_OK;
-					if ((FAILED(hr)))
-					{
-						MessageBox(hWnd, "err", "err", NULL);
-					}
-					else {
-						TextOut(hdc, x + 200, y-120, print_string[i], abcLength);
-					}
-				}
-			}
-			//기준 좌표 dos_header
-			//collect_struct.what_paint = 1;
+			parser_to_string_dos_header(print_string, &collect_struct, hWnd);
+			TextOut(hdc, 200, -150, "   pFile         RawData         Description", strlen("   pFile         RawData         Description"));
+			print_parsing(hdc, hWnd, print_string, &scroll_bar, &collect_struct); 
 		}
+		else if (collect_struct.what_paint == 1 && collect_struct.fin_parsing == 1)
+		{
 
-		//문자열은 print_parser로 
+		}
+		else if (collect_struct.what_paint == 2 && collect_struct.fin_parsing == 1)
+		{
+			//MessageBox(hWnd, "1", "1", MB_OK); 
+			parser_to_string_coff_header(print_string, &collect_struct, hWnd);
+			//MessageBox(hWnd, "2", "2", MB_OK);
+			TextOut(hdc, 200, -150, "   pFile         RawData         Description", strlen("   pFile         RawData         Description"));
+			print_parsing(hdc, hWnd, print_string, &scroll_bar, &collect_struct);
+		}
+		else if (collect_struct.what_paint == 3 && collect_struct.fin_parsing == 1)
+		{
+			if (collect_struct.binary_bit == 32)
+			{
+				parser_to_string_pe32_header(print_string, &collect_struct, hWnd);
+				TextOut(hdc, 200, -150, "   pFile         RawData         Description", strlen("   pFile         RawData         Description"));
+				print_parsing(hdc, hWnd, print_string, &scroll_bar, &collect_struct);
+			}
+			else if (collect_struct.binary_bit == 64)
+			{
+				parser_to_string_pe64_header(print_string, &collect_struct, hWnd);
+				TextOut(hdc, 200, -150, "   pFile         RawData         Description", strlen("   pFile         RawData         Description"));
+				print_parsing(hdc, hWnd, print_string, &scroll_bar, &collect_struct);
+			}
+		}
 
 		//InvalidateRect(hdc, rc, TRUE); 
 		//무효화 영역은 어떤것을 호출하면 하게하자. 
@@ -361,21 +384,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				{
 					InvalidateRect(hWnd, &rc, TRUE);
 					collect_struct.what_paint = 0;
-				}
-				else if (index_combobox == 1)
-				{
-					InvalidateRect(hWnd, &rc, TRUE);
-					collect_struct.what_paint = 1;
+					collect_struct.lines = 31;
 				}
 				else if (index_combobox == 2)
 				{
 					InvalidateRect(hWnd, &rc, TRUE);
 					collect_struct.what_paint = 2;
+					collect_struct.lines = 8; 
 				}
-				else if (index_combobox == 3) //sectopn 한번에 보여주자 
+				else if (index_combobox == 3)
 				{
 					InvalidateRect(hWnd, &rc, TRUE);
 					collect_struct.what_paint = 3;
+					if (collect_struct.binary_bit == 32)
+						collect_struct.lines = 30 + collect_struct.pe_option_header.NumberOfRvaAndSizes;
+					else if (collect_struct.binary_bit == 64)
+						collect_struct.lines = 29 + collect_struct.pe_option_header64.NumberOfRvaAndSizes;
+				}
+				else if (index_combobox == 4) //sectopn 한번에 보여주자 
+				{
+					InvalidateRect(hWnd, &rc, TRUE);
+					collect_struct.what_paint = 4;
 				}
 				break;
 			}
@@ -414,68 +443,7 @@ void change_char(Collect_Struct* collect_struct)
 		}
 	}
 }
-
-//초기화 작업 
-int setting_parser(HWND hWnd, Collect_Struct* collect_struct)
-{
-	collect_struct->fin_parsing = 0;
-	if (collect_struct->image_section_header != NULL)
-	{
-		free(collect_struct->image_section_header);
-		collect_struct->image_section_header = NULL;
-	}
-	if (collect_struct->pe_option_header.DataDirectory != NULL)
-	{
-		free(collect_struct->pe_option_header.DataDirectory);
-		collect_struct->pe_option_header.DataDirectory = NULL;
-	}
-	else if (collect_struct->pe_option_header64.DataDirectory != NULL)
-	{
-		free(collect_struct->pe_option_header64.DataDirectory);
-		collect_struct->pe_option_header64.DataDirectory = NULL;
-	}
-	//collect_struct.file_pointer = NULL;
-	collect_struct->what_paint = -1;
-	//memcpy(collect_struct.file_name, 0, 300); 
-	collect_struct->file_offset = 0;
-	collect_struct->binary_bit = 0;
-	memset(&collect_struct->dos_header, 0, sizeof(collect_struct->dos_header));
-	memset(&collect_struct->coff_header, 0, sizeof(collect_struct->coff_header));
-	memset(&collect_struct->pe_option_header, 0, sizeof(collect_struct->pe_option_header));
-	memset(&collect_struct->pe_option_header64, 0, sizeof(collect_struct->pe_option_header64));
-	
-	change_char(collect_struct); 
-
-	collect_struct->file_pointer = fopen(collect_struct->file_name, "rb");
-	if (collect_struct->file_pointer == NULL)
-	{
-		char test_file[300] = "";
-		sprintf(test_file, "%s", collect_struct->file_name);
-		MessageBox(hWnd, test_file, "Error Message", MB_OK); 
-		return -1;
-	}
-
-	//header를 파싱한 다음 section을 파싱한다. 
-	int check = PE_Header_Parser(collect_struct);
-	if (check == -1)
-	{
-		MessageBox(hWnd, "Parsing Error!", "Error Message", MB_OK);
-		return -1;
-	}
-	collect_struct->image_section_header = (IMAGE_Section_Header*)malloc(sizeof(IMAGE_Section_Header)* collect_struct->coff_header.NumberOfSections);
-
-	check = PE_Section_Parser(collect_struct); 
-	if (check == -1)
-	{
-		MessageBox(hWnd, "Section Parsing Error!", "Error Message", MB_OK);
-		return -1;
-	}
-	MessageBox(hWnd, "Parsing Success!", "Success Message", MB_OK);
-	collect_struct->fin_parsing = 1;
-	fclose(collect_struct->file_pointer); 
-	return 0;
-}
-
+ 
 void make_ComBoBox(HWND hWnd)
 {
 	char* items[] = { "IMAGE_DOS_HEADER","MS-DOS Stub Program", "IMAGE_FILE_HEADER", "IMAGE_OPTIONAL_HEADER" };
@@ -484,6 +452,17 @@ void make_ComBoBox(HWND hWnd)
 	for (i = 0; i < 5; i++)
 		SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)items[i]);
 	return;
+}
+//섹션의 개수만큼 콤보박스에 추가시킨다.
+void add_ComBoBox(HWND hWnd, Collect_Struct* collect_struct)
+{
+	int add_number = 0;
+	for (add_number = 0; add_number < collect_struct->coff_header.NumberOfSections; add_number++)
+	{
+		//MessageBox(hWnd, collect_struct->image_section_header[add_number].Name, "msg", MB_OK); 
+		SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)collect_struct->image_section_header[add_number].Name);
+	}
+	return 0;
 }
 //open file 
 int open_file(HWND hWnd, Collect_Struct* collect_struct, int max_len)

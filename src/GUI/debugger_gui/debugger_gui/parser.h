@@ -191,9 +191,39 @@ typedef struct _Collect_Struct
 	int binary_bit;
 	FILE* file_pointer;
 	char file_name[300];
-	int what_paint;
-	int fin_parsing;
+	int what_paint;		//어떤 헤더를 출력할것인지 
+	int fin_parsing;	//파싱이 다 되었는지 
+	int lines;			//특정 헤더의 라인수 
+	unsigned char* program_hex_value; //프로그램의 모든 16진수를 보여줄 포인터 (malloc)예정 
 }Collect_Struct;
+
+typedef struct _Scroll_Bar
+{
+	// These variables are required to display text. 
+	int xClient;     // width of client area 
+	int yClient;     // height of client area 
+	int xClientMax;  // maximum width of client area 
+
+	int xChar;       // horizontal scrolling unit 
+	int yChar;       // vertical scrolling unit 
+	int xUpper;      // average width of uppercase letters 
+
+	int xPos;        // current horizontal scrolling position 
+	int yPos;        // current vertical scrolling position 
+
+	int i;                  // loop counter 
+	int x, y;               // horizontal and vertical coordinates
+
+	int FirstLine;          // first line in the invalidated area 
+	int LastLine;           // last line in the invalidated area 
+	HRESULT hr;
+	int abcLength;// length of an abc[] item
+
+	//int lines = 40;
+
+	// Create an array of lines to display. 
+	//int LINES; //이는 나중에 값으로 바꾸자. (각 헤더마다 필요한 라인의 수)
+}Scroll_Bar;
 
 //extern Collect_Struct collect_struct; 
 
@@ -223,7 +253,17 @@ int PE_Section_Parser(Collect_Struct* collect_struct);
 void change_char(Collect_Struct* collect_struct);
 
 void parser_to_string_dos_header(char (*print_string)[100], Collect_Struct* collect_struct, HWND hWnd);
+void parser_to_string_coff_header(char(*print_string)[100], Collect_Struct* collect_struct, HWND hWnd);
+void parser_to_string_pe32_header(char(*print_string)[100], Collect_Struct* collect_struct, HWND hWnd);
+void parser_to_string_pe64_header(char(*print_string)[100], Collect_Struct* collect_struct, HWND hWnd);
 
 void GetSelectedDate(HWND hMonthCal, HWND hStat, HWND hDlg);
 
 int dos_header_getval(Collect_Struct* collect_struct, int n, int* offset);
+int coff_header_getval(Collect_Struct* collect_struct, int n, int* offset);
+int pe32_header_getval(Collect_Struct* collect_struct, int n, int* offset);
+int pe64_header_getval(Collect_Struct* collect_struct, int n, int* offset);
+
+void print_parsing(HWND hdc, HWND hWnd, char(*print_string)[100], Scroll_Bar* scroll_bar, Collect_Struct* collect_struct);
+void add_ComBoBox(HWND hWnd, Collect_Struct* collect_struct); 
+//void print_Data_Directory(HWND hWnd, char(*print_string)[100], Scroll_Bar* scroll_bar, Collect_Struct* collect_struct);

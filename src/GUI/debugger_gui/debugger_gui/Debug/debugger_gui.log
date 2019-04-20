@@ -1,12 +1,54 @@
-﻿  gui_pe_parser.c
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(301): warning C4047: '함수': 'UINT'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(301): warning C4024: 'MessageBoxA': 형식 및 실제 매개 변수 4의 형식이 서로 다릅니다.
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(449): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' 선언을 참조하십시오.
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(453): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+﻿  error_code.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\error_code.c(20): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(182): note: 'strerror' 선언을 참조하십시오.
+  gui_pe_parser.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(85): warning C4101: 'lpNmHdr' :참조되지 않은 지역 변수입니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(307): warning C4133: '함수': 'HDC'과(와) 'HWND' 사이의 형식이 호환되지 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(319): warning C4133: '함수': 'HDC'과(와) 'HWND' 사이의 형식이 호환되지 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(327): warning C4133: '함수': 'HDC'과(와) 'HWND' 사이의 형식이 호환되지 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(333): warning C4133: '함수': 'HDC'과(와) 'HWND' 사이의 형식이 호환되지 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(465): warning C4098: 'add_ComBoBox': 'void' 함수에서 값을 반환하고 있습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(471): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(489): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
+  ip_check.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\ip_check.c(63): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\ip_check.c(65): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\ip_check.c(67): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\ip_check.c(69): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(440): note: 'strtok' 선언을 참조하십시오.
+  parser_to_string.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(24): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(492): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
-C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\gui_pe_parser.c(510): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\string.h(133): note: 'strcpy' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(33): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(20): warning C4101: 'debug' :참조되지 않은 지역 변수입니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(60): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(68): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(91): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(114): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(120): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+  pe_parser.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(39): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(208): note: 'fopen' 선언을 참조하십시오.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(43): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.17763.0\ucrt\stdio.h(1774): note: 'sprintf' 선언을 참조하십시오.
+  scroll_print_content.c
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\scroll_print_content.c(18): warning C4047: '함수': 'UINT'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\scroll_print_content.c(18): warning C4024: 'MessageBoxA': 형식 및 실제 매개 변수 4의 형식이 서로 다릅니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\scroll_print_content.c(21): warning C4133: '함수': 'HWND'과(와) 'HDC' 사이의 형식이 호환되지 않습니다.
+  코드를 생성하고 있습니다...
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(127): warning C4716: 'PE_Section_Parser': 값을 반환해야 합니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\pe_parser.c(118): warning C4715: 'PE_Header_Parser': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(178): warning C4715: 'pe64_header_getval': 모든 제어 경로에서 값을 반환하지는 않습니다.
+C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\debugger_gui\parser_to_string.c(216): warning C4715: 'pe32_header_getval': 모든 제어 경로에서 값을 반환하지는 않습니다.
   debugger_gui.vcxproj -> C:\Users\tuuna\Windows_Debugger\src\GUI\debugger_gui\Debug\debugger_gui.exe

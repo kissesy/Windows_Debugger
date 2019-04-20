@@ -30,6 +30,12 @@
     <ClCompile Include="parser_to_string.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="scroll_print_content.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="print_data_directory.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
